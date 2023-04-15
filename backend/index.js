@@ -8,14 +8,14 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 // Setup
-const { Network, Alchemy } = require("alchemy-sdk");
+const { Network, Alchemy, Utils } = require("alchemy-sdk");
 // import { Network, Alchemy } from "a
 const settings = {
   apiKey: "w4EirLUt-b5cyzm6xa1In_mz5yKIxIc7",
   network: Network.ETH_SEPOLIA,
 };
-let userAddress = "0x301daF80D468510939d4dEd583b323dC29759186";
-let contractAddress = "0x53844F9577C2334e541Aec7Df7174ECe5dF1fCf0";
+let userAddress = "";
+let contractAddress = "0x706a71B837D9c8B1dae73a55aF1d63726dD7B8A1";
 
 const alchemy = new Alchemy(settings);
 
@@ -55,9 +55,14 @@ app.get("/", async (request, response) => {
 });
 app.post("/balance", async (request, response) => {
   userAddress = request.body.address;
-  let balance = await alchemy.core.getTokenBalances(userAddress, [
-    contractAddress,
-  ]);
+  //   let balanceJSON = await alchemy.core.getTokenBalances(userAddress, [
+  //     contractAddress,
+  //   ]);
+  //   response.status(200).send({ message: balanceJSON });
+
+  let balance = await alchemy.core.getBalance(userAddress, "latest");
+  balance = Utils.formatEther(balance);
+  //   console.log(`Balance of ${address}: ${balance} ETH`);
   response.status(200).send({ message: balance });
 });
 
