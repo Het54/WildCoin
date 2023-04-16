@@ -32,24 +32,27 @@ class buy_wildcoin : AppCompatActivity() {
 
         buttonClick.setOnClickListener {
             val amount = amount_bb.text.toString();
+            val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
+            var b = sharedPreferences.getString("balance","")
+            if (b != null) {
+                b = (b.toInt() + amount.toInt()).toString()
+            }
+            Toast.makeText(this, "Coins Updated Successfully!", Toast.LENGTH_SHORT).show()
+            val editor: SharedPreferences.Editor= sharedPreferences.edit()
+            editor.putString("balance", b)
+            editor.commit()
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
             val queue = Volley.newRequestQueue(this)
-            val url = ""
+            val url = "https://backend-wildcoin.herokuapp.com/createAccount/transfertoaaccount"
             val stringRequest = StringRequest(
                 Request.Method.POST, url,
                 { response ->
                     // Display the first 500 characters of the response string.
                     Toast.makeText(applicationContext,"$response",Toast.LENGTH_SHORT).show()
-                    val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
-                    var b = sharedPreferences.getString("balance","")
-                    if (b != null) {
-                        b = (b.toInt() + amount.toInt()).toString()
-                    }
-                    val editor: SharedPreferences.Editor= sharedPreferences.edit()
-                    editor.putString("balance", b)
-                    editor.commit()
-                    val intent = Intent(applicationContext, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+
                 },
                 { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
                     Log.d(TAG,"$error")})

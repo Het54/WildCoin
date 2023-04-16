@@ -29,7 +29,9 @@ class amount_entry : AppCompatActivity() {
             Log.d(TAG, "Balance: " + balance)
             val amt = amount.text.toString()
             if (balance != null) {
-                if (balance.toDouble() == amt.toDouble()) {
+                if (balance.toDouble() >= amt.toDouble()) {
+                    var generatedsign = generateSignature("056cb6b3a8f2cc317afd6d425ca8cde2ca867c32f1b372227b4f538101f5bce9", amt)
+                    Log.d(TAG,"SIgnature: "+ generatedsign)
                     val intent = Intent(this, SenderActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("amount", amount.text.toString())
@@ -51,16 +53,18 @@ class amount_entry : AppCompatActivity() {
             startActivity(intent)
         }
 
-//    fun generateSignature(privateKey: String, message: String): String {
-//        val ecKeyPair = ECKeyPair.create(Numeric.hexStringToByteArray(privateKey))
-//        val messageHash = Hash.sha3(message.toByteArray())
-//        val signature = Sign.signMessage(messageHash, ecKeyPair, false)
-//        val r = Numeric.toHexString(signature.r)
-//        val s = Numeric.toHexString(signature.s)
-//        val v = Numeric.toHexString(signature.v)
-//        return "0x${r}${s}${v}"
-//    }
 
 
+
+    }
+
+    fun generateSignature(privateKey: String, message: String): String {
+        val ecKeyPair = ECKeyPair.create(Numeric.hexStringToByteArray(privateKey))
+        val messageHash = Hash.sha3(message.toByteArray())
+        val signature = Sign.signMessage(messageHash, ecKeyPair, false)
+        val r = Numeric.toHexString(signature.r)
+        val s = Numeric.toHexString(signature.s)
+        val v = Numeric.toHexString(signature.v)
+        return "0x${r}${s}${v}"
     }
 }
