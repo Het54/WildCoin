@@ -39,7 +39,7 @@ class SenderActivity : AppCompatActivity() {
     }
 
     private fun startDiscovery() {
-        val SERVICE_ID = "com.example.benzenecoin"
+        val SERVICE_ID = "com.example.wc"
         val discoveryOptions = DiscoveryOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT).build()
         Nearby.getConnectionsClient(applicationContext)
             .startDiscovery(SERVICE_ID, endpointDiscoveryCallback, discoveryOptions)
@@ -57,7 +57,7 @@ class SenderActivity : AppCompatActivity() {
             override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
                 // An endpoint was found. We request a connection to it.
                 Nearby.getConnectionsClient(applicationContext)
-                    .requestConnection("BenzeneCoin", endpointId, connectionLifecycleCallback) //change to faulty name- first param
+                    .requestConnection("WildCoin", endpointId, connectionLifecycleCallback) //change to faulty name- first param
                     .addOnSuccessListener(
                         OnSuccessListener { unused: Void? -> })
                     .addOnFailureListener(

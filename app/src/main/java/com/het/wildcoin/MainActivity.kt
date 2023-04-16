@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        buttonClick2.setOnClickListener {
-//            val intent = Intent(this, buy_benzenecoin::class.java)
+//            val intent = Intent(this, buy_wildcoin::class.java)
 //            startActivity(intent)
 //        }
 

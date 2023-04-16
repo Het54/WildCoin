@@ -39,11 +39,11 @@ class RecieveActivity : AppCompatActivity() {
     }
 
     private fun startAdvertising() {
-        val SERVICE_ID = "com.example.benzenecoin"
+        val SERVICE_ID = "com.example.wc"
         val advertisingOptions = AdvertisingOptions.Builder().setStrategy(Strategy.P2P_POINT_TO_POINT).build()
         Nearby.getConnectionsClient(applicationContext)
             .startAdvertising(
-                "BenzeneCoin", SERVICE_ID, connectionLifecycleCallback, advertisingOptions   //change first param to name of Teacher
+                "WildCoin", SERVICE_ID, connectionLifecycleCallback, advertisingOptions   //change first param to name of Teacher
             )
             .addOnSuccessListener(
                 OnSuccessListener { unused: Void? ->
