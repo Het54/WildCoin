@@ -47,4 +47,7 @@ dependencies {
     implementation 'com.google.android.material:material:<1.7.0-alpha01>'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.karumi:dexter:6.2.3'
+    implementation 'org.web3j:core:5.0.0'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
 }

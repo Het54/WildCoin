@@ -31,6 +31,9 @@
             android:name=".RecieveActivity"
             android:exported="false" />
         <activity
+            android:name=".amount_entry"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
