@@ -7,7 +7,6 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const { API_KEY, PRIVATE_KEY, abi, CONTRACT_ADDRESS } = process.env;
-// app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
@@ -23,23 +22,20 @@ const {
 
 require("dotenv").config();
 
-//Grab your Hedera testnet account ID and private key from your .env file
 const myAccountId = process.env.MY_ACCOUNT_ID;
 const myPrivateKey = process.env.MY_PRIVATE_KEY;
 
-// If we weren't able to grab it, we should throw a new error
 if (myAccountId == null || myPrivateKey == null) {
   throw new Error(
     "Environment variables myAccountId and myPrivateKey must be present"
   );
 }
 
-const newAccountPrivateKey = PrivateKey.generateED25519();
-const newAccountPublicKey = newAccountPrivateKey.publicKey;
-
-//Create a new account with 1,000 tinybar starting balance
 app.post("/createAccount", async (request, response) => {
   try {
+    const newAccountPrivateKey = PrivateKey.generateECDSA();
+    const newAccountPublicKey = newAccountPrivateKey.publicKey;
+
     const client = Client.forTestnet();
 
     client.setOperator(myAccountId, myPrivateKey);
@@ -47,19 +43,23 @@ app.post("/createAccount", async (request, response) => {
       .setKey(newAccountPublicKey)
       .setInitialBalance(Hbar.fromTinybars(0))
       .execute(client);
-
-    // Get the new account ID
     const getReceipt = await newAccount.getReceipt(client);
     const newAccountId = getReceipt.accountId;
 
     console.log("The new account ID is: " + newAccountId);
-    response.status(200).json({ message: newAccountId.toString() });
+    response.status(200).json({
+      message: {
+        accountId: newAccountId.toString(),
+        publicKey: newAccountPublicKey.toString(),
+        privateKey: myPrivateKey.toString(),
+      },
+    });
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: "Server Error" });
   }
 });
-// gg();
+
 app.post("/balance", async (request, response) => {
   try {
     const client = Client.forTestnet();
@@ -71,31 +71,23 @@ app.post("/balance", async (request, response) => {
       .setAccountId(ownerAddress)
       .execute(client);
 
-    let log = accountBalance.hbars._valueInTinybar;
-    response.status(200).send({ message: log });
+    let balance = accountBalance.hbars._valueInTinybar;
+    response.status(200).send({ message: balance });
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: "Server Error" });
   }
 });
 
-async function decreaseHbars() {
-  const amount = 100;
-  const client = Client.forTestnet();
-  client.setOperator(myAccountId, myPrivateKey);
-  const newAccountId = "0.0.4151996";
-  const sendHbar = await new TransferTransaction()
-    .addHbarTransfer(myAccountId, Hbar.fromTinybars(-amount)) //Sending account
-    .addHbarTransfer(newAccountId, Hbar.fromTinybars(amount)) //Receiving account
-    .execute(client);
-}
+app.get("/", (req, res) => {
+  res.send("Hello from backend");
+});
 // the amount of hbars to decrease
 app.post("/updateMain", async (request, response) => {
   try {
     const toAccountId = request.body.toAccountId;
     const fromAccountId = request.body.fromAccountId;
     const fromPrivateKey = request.body.fromPrivateKey;
-    // console.log(fromAccountId, fromPrivateKey);
     const amount = request.body.amount;
     const client = Client.forTestnet();
     client.setOperator(fromAccountId, fromPrivateKey);
@@ -113,7 +105,6 @@ app.post("/updateMain", async (request, response) => {
 
 app.post("/buyHBAR", async (request, response) => {
   try {
-    // console.log(fromAccountId, fromPrivateKey);
     const toAccountId = request.body.toAccountId;
     const amount = request.body.amount;
     const client = Client.forTestnet();
@@ -129,9 +120,7 @@ app.post("/buyHBAR", async (request, response) => {
     response.status(500).json({ message: "Server Error" });
   }
 });
-// decreaseHbars();
 
-app.listen(3002, () => {
-  // app.listen(9002, () => {
+app.listen(process.env.PORT || 3002, () => {
   console.log("Backend started at port 3002");
 });
