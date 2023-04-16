@@ -1,14 +1,17 @@
 package com.het.wildcoin
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -24,6 +27,9 @@ import com.karumi.dexter.listener.single.PermissionListener
 
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = "MainActivity";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,8 +49,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonClick2.setOnClickListener {
-            val intent = Intent(this, buy_wildcoin::class.java)
-            startActivity(intent)
+            if(!hasNetworkConnection(this)){
+                Toast.makeText(this, "No Internet Connection, Please try again.", Toast.LENGTH_SHORT).show()
+
+            }
+            else{
+                val intent = Intent(this, buy_wildcoin::class.java)
+                startActivity(intent)
+            }
+
+
         }
 
 
@@ -133,11 +147,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun hasNetworkConnection(): Boolean {
-        val connectivityManager = getSystemService(
-            ConnectivityManager::class.java
-        )
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnectedOrConnecting
+
+    private fun hasNetworkConnection(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                return true
+            }
+        }
+        return false
     }
 }

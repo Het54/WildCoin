@@ -71,10 +71,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
-            android:id="@+id/benz"
+            android:id="@+id/wc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BENZ"
+            android:text="WC"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="@+id/view"

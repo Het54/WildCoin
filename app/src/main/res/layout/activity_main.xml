@@ -36,6 +36,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/search"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -89,7 +90,7 @@
             android:id="@+id/benz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BENZ"
+            android:text="WC"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="@+id/view"
@@ -103,7 +104,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/round_corner"
-            android:text="Send"
+            android:text="@string/send"
             android:textColor="@color/white"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +117,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/round_corner"
-            android:text="Receive"
+            android:text="@string/receive"
             android:textColor="@color/white"
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -141,15 +142,15 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_margin="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="60dp"
         android:background="@drawable/round_corner"
-        android:text="Buy BenzenCoin"
+        android:text="@string/buy_wildcoin"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
