@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         if (!sharedPreferences.getBoolean("updateb_once", false)) {  //test
             editor.putBoolean("updateb_once", true)
-            editor.putString("balance", "2000")
+            editor.putString("balance", "0")
             editor.commit()
         }
         balance.text = sharedPreferences.getString("balance", "0")
