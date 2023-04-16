@@ -38,33 +38,28 @@ const newAccountPrivateKey = PrivateKey.generateED25519();
 const newAccountPublicKey = newAccountPrivateKey.publicKey;
 
 //Create a new account with 1,000 tinybar starting balance
-async function gg() {
-  const client = Client.forTestnet();
+app.post("/createAccount", async (request, response) => {
+  try {
+    const client = Client.forTestnet();
 
-  client.setOperator(myAccountId, myPrivateKey);
-  const newAccount = await new AccountCreateTransaction()
-    .setKey(newAccountPublicKey)
-    .setInitialBalance(Hbar.fromTinybars(0))
-    .execute(client);
+    client.setOperator(myAccountId, myPrivateKey);
+    const newAccount = await new AccountCreateTransaction()
+      .setKey(newAccountPublicKey)
+      .setInitialBalance(Hbar.fromTinybars(0))
+      .execute(client);
 
-  // Get the new account ID
-  const getReceipt = await newAccount.getReceipt(client);
-  const newAccountId = getReceipt.accountId;
+    // Get the new account ID
+    const getReceipt = await newAccount.getReceipt(client);
+    const newAccountId = getReceipt.accountId;
 
-  console.log("The new account ID is: " + newAccountId);
-
-  //Verify the account balance
-  const accountBalance = await new AccountBalanceQuery()
-    .setAccountId(newAccountId)
-    .execute(client);
-
-  console.log(
-    "The new account balance is: " +
-      accountBalance.hbars.toTinybars() +
-      " tinybar."
-  );
-}
-gg();
+    console.log("The new account ID is: " + newAccountId);
+    response.status(200).json({ message: newAccountId.toString() });
+  } catch (err) {
+    console.error(err);
+    response.status(500).json({ message: "Server Error" });
+  }
+});
+// gg();
 app.post("/balance", async (request, response) => {
   try {
     const client = Client.forTestnet();
