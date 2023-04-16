@@ -49,5 +49,6 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.3'
     implementation 'org.web3j:core:5.0.0'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'com.android.volley:volley:1.2.1'
 
 }
