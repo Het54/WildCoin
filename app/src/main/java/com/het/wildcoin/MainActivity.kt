@@ -1,16 +1,15 @@
 package com.het.wildcoin
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
-import android.net.wifi.WifiManager
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
@@ -23,10 +22,13 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
 
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         val bt_send = findViewById<Button>(R.id.send_main)
         val bt_receive = findViewById<Button>(R.id.receive_main)
@@ -40,13 +42,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        buttonClick2.setOnClickListener {
-//            val intent = Intent(this, buy_wildcoin::class.java)
-//            startActivity(intent)
-//        }
+        buttonClick2.setOnClickListener {
+            val intent = Intent(this, buy_wildcoin::class.java)
+            startActivity(intent)
+        }
 
-        val wifi: WifiManager =
-            getApplicationContext().getSystemService(WIFI_SERVICE) as WifiManager
+
 
 
         val balance = findViewById<TextView>(R.id.Balance)
@@ -130,5 +131,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun hasNetworkConnection(): Boolean {
+        val connectivityManager = getSystemService(
+            ConnectivityManager::class.java
+        )
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnectedOrConnecting
     }
 }

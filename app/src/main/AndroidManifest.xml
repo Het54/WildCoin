@@ -25,6 +25,9 @@
         android:theme="@style/Theme.WildCoin"
         tools:targetApi="31">
         <activity
+            android:name=".buy_wildcoin"
+            android:exported="false" />
+        <activity
             android:name=".SenderActivity"
             android:exported="false" />
         <activity
