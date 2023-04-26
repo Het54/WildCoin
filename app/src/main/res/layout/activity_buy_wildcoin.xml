@@ -76,7 +76,7 @@
         android:layout_margin="20dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/round_corner"
-        android:text="Buy BenzenCoin"
+        android:text="Buy WildCoin"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20dp"

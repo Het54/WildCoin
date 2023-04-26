@@ -1,5 +1,6 @@
 package com.het.wildcoin
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -23,12 +24,21 @@ class signin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
+        val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val cacnt = findViewById<Button>(R.id.cbutton);
         val name = findViewById<TextInputEditText>(R.id.name);
         val emailaddress = findViewById<TextInputEditText>(R.id.emailaddress);
         val contactnumber = findViewById<TextInputEditText>(R.id.contactnumber);
         val username = findViewById<TextInputEditText>(R.id.username);
         val password = findViewById<TextInputEditText>(R.id.password);
+        val sname = sharedPreferences.getString("name", null)
+        val emailadd = sharedPreferences.getString("emailadd", null)
+        val scnum = sharedPreferences.getString("cnum", null)
+        val susername = sharedPreferences.getString("username", null)
+        val spassword = sharedPreferences.getString("password", null)
+
+
+//        Log.d(TAG,"name:"+sname+"email address:"+emailadd+"contact number"+scnum+"username:"+susername+"paassword:"+spassword)
 
 
 
@@ -60,28 +70,40 @@ class signin : AppCompatActivity() {
             }
             else{
 
-                val queue = Volley.newRequestQueue(this)
-                val url = "https://backend-wildcoin.herokuapp.com/createAccount"
-                val stringRequest = StringRequest(
-                    Request.Method.POST, url,
-                    { response ->
-                        // Display the first 500 characters of the response string.
-                        //Toast.makeText(applicationContext,"$response",Toast.LENGTH_SHORT).show()
-                        val jsonObject = JSONObject(response)
-                        val messageobject = jsonObject.getJSONObject("message")
-                        val accountid = messageobject.getString("accountId")
-                        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
-                        val editor: SharedPreferences.Editor= sharedPreferences.edit()
-                        editor.putString("accountID", accountid)
-                        editor.commit()
-                        Toast.makeText(this, "Account created Successfully", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                    },
-                    { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
-                        Log.d(TAG,"$error")})
-                queue.add(stringRequest)
+                val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
+                val editor: SharedPreferences.Editor= sharedPreferences.edit()
+                editor.putString("name", n)
+                editor.putString("emailadd", ea)
+                editor.putString("cnum", cn)
+                editor.putString("username", un)
+                editor.putString("password", p)
+                editor.commit()
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(intent)
+
+
+//                val queue = Volley.newRequestQueue(this)
+//                val url = "https://backend-wildcoin.herokuapp.com/createAccount"
+//                val stringRequest = StringRequest(
+//                    Request.Method.POST, url,
+//                    { response ->
+//                        // Display the first 500 characters of the response string.
+//                        //Toast.makeText(applicationContext,"$response",Toast.LENGTH_SHORT).show()
+//                        val jsonObject = JSONObject(response)
+//                        val messageobject = jsonObject.getJSONObject("message")
+//                        val accountid = messageobject.getString("accountId")
+//                        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
+//                        val editor: SharedPreferences.Editor= sharedPreferences.edit()
+//                        editor.putString("accountID", accountid)
+//                        editor.commit()
+//                        Toast.makeText(this, "Account created Successfully", Toast.LENGTH_SHORT).show()
+//                        val intent = Intent(applicationContext, MainActivity::class.java)
+//                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        startActivity(intent)
+//                    },
+//                    { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
+//                        Log.d(TAG,"$error")})
+//                queue.add(stringRequest)
 
             }
 

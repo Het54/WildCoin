@@ -25,6 +25,9 @@
         android:theme="@style/Theme.WildCoin"
         tools:targetApi="31">
         <activity
+            android:name=".signin"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -40,7 +43,7 @@
             android:name=".amount_entry"
             android:exported="false" />
         <activity
-            android:name=".signin"
+            android:name=".splash_screen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
