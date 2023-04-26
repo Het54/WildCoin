@@ -10,9 +10,11 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputEditText
+import org.json.JSONObject
 
 class buy_wildcoin : AppCompatActivity() {
 
@@ -34,29 +36,44 @@ class buy_wildcoin : AppCompatActivity() {
             val amount = amount_bb.text.toString();
             val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
             var b = sharedPreferences.getString("balance","")
-            if (b != null) {
-                b = (b.toInt() + amount.toInt()).toString()
-            }
-            Toast.makeText(this, "Coins Updated Successfully!", Toast.LENGTH_SHORT).show()
-            val editor: SharedPreferences.Editor= sharedPreferences.edit()
-            editor.putString("balance", b)
-            editor.commit()
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val accountID = sharedPreferences.getString("accountID", "")
+
 
             val queue = Volley.newRequestQueue(this)
-            val url = "https://backend-wildcoin.herokuapp.com/createAccount/transfertoaaccount"
-            val stringRequest = StringRequest(
-                Request.Method.POST, url,
-                { response ->
-                    // Display the first 500 characters of the response string.
-                    Toast.makeText(applicationContext,"$response",Toast.LENGTH_SHORT).show()
-
+            val url = "http://ec2-3-144-33-176.us-east-2.compute.amazonaws.com:3000/tokenbalance"
+            val stringRequest = object : StringRequest(Request.Method.POST, url,
+                Response.Listener { response ->
+                    run {
+                        val jsonObject = JSONObject(response)
+                        val bal = jsonObject.getString("message")
+                        if (b != null) {
+                            b = (b!!.toInt() + amount.toInt()).toString()
+                        }
+                        Toast.makeText(this, "Coins Updated Successfully!", Toast.LENGTH_SHORT).show()
+                        val editor: SharedPreferences.Editor= sharedPreferences.edit()
+                        editor.putString("balance", b)
+                        editor.commit()
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                    }
                 },
-                { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
-                    Log.d(TAG,"$error")})
+                Response.ErrorListener { error ->
+                    run {
+                        Toast.makeText(applicationContext, "$error", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "$error")
+                    }
+                }) {
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params["address_to"] = accountID.toString()
+                    params["type"] = "buy"
+                    params["amount"] = amount
 
+                    return params
+                }
+
+            }
             queue.add(stringRequest)
         }
     }
