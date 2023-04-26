@@ -56,6 +56,7 @@ class buy_wildcoin : AppCompatActivity() {
                 },
                 { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
                     Log.d(TAG,"$error")})
+
             queue.add(stringRequest)
         }
     }

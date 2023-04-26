@@ -1,6 +1,7 @@
 package com.het.wildcoin
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -13,6 +14,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
@@ -24,12 +28,14 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity";
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val bt_send = findViewById<Button>(R.id.send_main)
+        val balance = findViewById<TextView>(R.id.Balance)
         val bt_receive = findViewById<Button>(R.id.receive_main)
         bt_send.setOnClickListener {
             Onlocation()
@@ -46,6 +53,27 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RecieveActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+        }
+        var sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        var editor: SharedPreferences.Editor= sharedPreferences.edit()
+
+        if(hasNetworkConnection(this)){
+            val queue = Volley.newRequestQueue(this)
+            val url = "http://ec2-3-144-33-176.us-east-2.compute.amazonaws.com:3000/tokenbalance"
+            val stringRequest = StringRequest(
+                Request.Method.POST, url,
+                { response ->
+                    // Display the first 500 characters of the response string.
+                    //Toast.makeText(applicationContext,"$response",Toast.LENGTH_SHORT).show()
+                    val jsonObject = JSONObject(response)
+
+                    val bal = jsonObject.getString("message")
+                    editor.putString("balance", bal)
+                    balance.text = sharedPreferences.getString("balance", "0")
+                },
+                { error -> Toast.makeText(applicationContext,"$error",Toast.LENGTH_SHORT).show()
+                    Log.d(TAG,"$error")})
+            queue.add(stringRequest)
         }
 
         buttonClick2.setOnClickListener {
@@ -64,9 +92,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val balance = findViewById<TextView>(R.id.Balance)
-        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+
         if (!sharedPreferences.getBoolean("updateb_once", false)) {  //test
             editor.putBoolean("updateb_once", true)
             editor.putString("balance", "0")

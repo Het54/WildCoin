@@ -92,8 +92,6 @@ class signin : AppCompatActivity() {
                         val accountid = jsonObject.getString("address")
                         val accountKey = jsonObject.getString("privateKey")
                         Log.d(TAG, "onCreate: $accountid")
-                        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
-                        val editor: SharedPreferences.Editor= sharedPreferences.edit()
                         editor.putString("accountID", accountid)
                         editor.putString("accountKey", accountKey)
                         editor.commit()
