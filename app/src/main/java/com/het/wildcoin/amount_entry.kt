@@ -52,12 +52,10 @@ class amount_entry : AppCompatActivity() {
                     var generatedsign = generateSignature("056cb6b3a8f2cc317afd6d425ca8cde2ca867c32f1b372227b4f538101f5bce9", amt)
                     Log.d(TAG,"SIgnature: "+ generatedsign)
 
-//                    var result = verifySignature(generatedsign, amt, "0x1b3ce110533Ab2C348E8A31456865F2E3723530d")
-//                    Log.d(TAG,"Result: "+ result)
-//                    val intent = Intent(this, SenderActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    intent.putExtra("amount", amount.text.toString())
-//                    startActivity(intent)
+                    val intent = Intent(this, SenderActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra("amount", amount.text.toString())
+                    startActivity(intent)
                 } else
                     Toast.makeText(
                         applicationContext,

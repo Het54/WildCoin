@@ -40,22 +40,27 @@ class buy_wildcoin : AppCompatActivity() {
 
 
             val queue = Volley.newRequestQueue(this)
-            val url = "http://ec2-3-144-33-176.us-east-2.compute.amazonaws.com:3000/tokenbalance"
+            val url = "http://ec2-3-144-33-176.us-east-2.compute.amazonaws.com:3000/transfer"
             val stringRequest = object : StringRequest(Request.Method.POST, url,
                 Response.Listener { response ->
                     run {
                         val jsonObject = JSONObject(response)
-                        val bal = jsonObject.getString("message")
-                        if (b != null) {
-                            b = (b!!.toInt() + amount.toInt()).toString()
+                        val mes = jsonObject.getString("message")
+                        if(mes == "Transfer SuccessFull!") {
+                            if (b != null) {
+                                b = (b!!.toInt() + amount.toInt()).toString()
+                            }
+                            Toast.makeText(this, "Coins Updated Successfully!", Toast.LENGTH_SHORT)
+                                .show()
+                            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                            editor.putString("balance", b)
+                            editor.commit()
+                            Log.d(TAG, "onCreate: address $accountID")
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
                         }
-                        Toast.makeText(this, "Coins Updated Successfully!", Toast.LENGTH_SHORT).show()
-                        val editor: SharedPreferences.Editor= sharedPreferences.edit()
-                        editor.putString("balance", b)
-                        editor.commit()
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
                     }
                 },
                 Response.ErrorListener { error ->

@@ -13,15 +13,20 @@ import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.gson.Gson
 
 class SenderActivity : AppCompatActivity() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var amount: String
+    lateinit var accountID: String
+    lateinit var accountKey: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction)
         sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val b = sharedPreferences.getString("balance","")
+        accountID = sharedPreferences.getString("accountID", "").toString()
+        accountKey = sharedPreferences.getString("accountKey", "").toString()
         val Balance_rec = findViewById<TextView>(R.id.Balance_trans)
         Balance_rec.text=b
         amount = intent.getStringExtra("amount").toString()
@@ -44,7 +49,7 @@ class SenderActivity : AppCompatActivity() {
         Nearby.getConnectionsClient(applicationContext)
             .startDiscovery(SERVICE_ID, endpointDiscoveryCallback, discoveryOptions)
             .addOnSuccessListener { unused: Void? ->
-                Toast.makeText(applicationContext,"Connecting to peer", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"Connecting...", Toast.LENGTH_SHORT).show()
                 Log.d("Sender","Discovery success")
             }
             .addOnFailureListener { e: Exception? ->
@@ -71,6 +76,7 @@ class SenderActivity : AppCompatActivity() {
     private val payloadCallback: PayloadCallback = object : PayloadCallback() {
         override fun onPayloadReceived(endpointId: String, payload: Payload) {
             val data_recieved = payload.asBytes()?.let { String(it, Charsets.UTF_8) }
+            Log.d(TAG, "onPayloadReceived: ${Gson().toJson(data_recieved)}")
             Toast.makeText(applicationContext,"Data received $data_recieved", Toast.LENGTH_SHORT).show()
             if(data_recieved=="Success"){
                 val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
@@ -108,7 +114,11 @@ class SenderActivity : AppCompatActivity() {
                         // if you were advertising, you can stop as well
                         Toast.makeText(applicationContext,"EndID of Receiver: $endpointId", Toast.LENGTH_SHORT).show()
                         val data = Payload.fromBytes(amount.toByteArray())
+                        val account_ID_p = Payload.fromBytes(accountID.toByteArray())
+                        val accountkey_p = Payload.fromBytes(accountKey.toByteArray())
                         Nearby.getConnectionsClient(applicationContext).sendPayload(endpointId, data)
+                        Nearby.getConnectionsClient(applicationContext).sendPayload(endpointId, account_ID_p)
+                        Nearby.getConnectionsClient(applicationContext).sendPayload(endpointId, accountkey_p)
                         Nearby.getConnectionsClient(applicationContext).stopDiscovery()
                         //  friendEndpointId = endpointId
 
@@ -131,5 +141,9 @@ class SenderActivity : AppCompatActivity() {
         super.onStop()
         Nearby.getConnectionsClient(applicationContext).stopDiscovery()
         Log.d("Sender","Discovery stopped")
+    }
+
+    companion object {
+        private const val TAG = "SenderActivity"
     }
 }
