@@ -1,13 +1,13 @@
 # WildCoin
 Project Made for Wild Hacks 2023
-# WildCoin: Hedera Token
+# WildCoin
 ## Overview
-WildCoin is a platform built on the Hedera Token ecosystem that aims to provide a seamless experience for users to buy and sell digital assets. Our team worked tirelessly to develop this platform by utilizing various technologies such as Android Studio and Node.js.
+WildCoin is a platform built on the Ethereum Blockchain that aims to provide a seamless experience for users to buy and sell digital assets. Our team worked tirelessly to develop this platform by utilizing various technologies such as Android Studio and Node.js.
 
 ## Features
 User-friendly interface
 - Secure payment processing
-- Seamless integration with Hedera Token ecosystem
+- Seamless integration with Ethereum Blockchain
 - 24/7 customer support
 
 ## Installation
