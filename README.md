@@ -1,12 +1,12 @@
 # WildCoin: Offline Blockchain Payments Architecture
 ## Overview
-WildCoin is a platform built on the Ethereum Blockchain that aims to provide a seamless experience for users to buy and sell digital assets. Our team worked tirelessly to develop this platform by utilizing various technologies such as Android Studio and Node.js.
+WILDCOIN is a cryptocurrency platform that enables easy and secure money transfers. WildCoin is built on the Ethereum Blockchain Sepolia Testnet that aims to provide a seamless experience for users to buy and sell WildCoin. It allows transactions even in areas with limited or no internet connectivity. The platform is built on cutting-edge technologies that ensure security and scalability.
 
 ## Features
 User-friendly interface
-- Secure payment processing
-- Seamless integration with Ethereum Blockchain
-- 24/7 customer support
+- Secure Wallets
+- Send WildCoins without Internet Connectivity
+- Buy WildCoin
 
 ## Installation
 To install WildCoin, please follow these steps:
@@ -20,14 +20,3 @@ To install WildCoin, please follow these steps:
 1. Install Android studio
 2. gradle build app
 3. Run the app
-
-## Usage
-To use WildCoin, simply navigate to the website and follow these steps:
-
-Create an account or log in to your existing account.
-Browse the available digital assets and select the ones you wish to purchase.
-Add the digital assets to your cart and proceed to checkout.
-Enter your payment information and confirm the purchase.
-The digital assets will be added to your account balance.
-Contributing
-We welcome contributions from anyone interested in improving WildCoin. If you find a bug or have an idea for a new feature, please create a pull request or open an issue.
