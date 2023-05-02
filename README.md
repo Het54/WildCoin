@@ -1,4 +1,4 @@
-# WildCoin
+# WildCoin: Offline Blockchain Payments Architecture
 ## Overview
 WildCoin is a platform built on the Ethereum Blockchain that aims to provide a seamless experience for users to buy and sell digital assets. Our team worked tirelessly to develop this platform by utilizing various technologies such as Android Studio and Node.js.
 
